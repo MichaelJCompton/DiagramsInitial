@@ -5,8 +5,11 @@
       <configuration>
         <setting name="compilerMaxHeapSize" value="1024" />
         <setting name="gwtScriptOutputStyle" value="DETAILED" />
-        <setting name="gwtSdkUrl" value="file://$USER_HOME$/Library/java/gwt-2.7-2.0" />
+        <setting name="gwtSdkUrl" value="file://$USER_HOME$/gwt-2.7.0" />
         <setting name="webFacet" value="Web" />
+        <packaging>
+          <module name="michael.com.AbstractSyntax" enabled="false" />
+        </packaging>
       </configuration>
     </facet>
     <facet type="web" name="Web">
@@ -30,5 +33,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="gwt-user" level="project" />
     <orderEntry type="library" name="com.ahome-it:lienzo-core:2.0.125-RC1" level="project" />
+    <orderEntry type="library" name="gwt-user (2)" level="project" />
   </component>
 </module>
