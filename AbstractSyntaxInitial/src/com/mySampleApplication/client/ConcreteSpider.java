@@ -6,33 +6,32 @@ import com.ait.lienzo.client.core.event.NodeMouseExitEvent;
 import com.ait.lienzo.client.core.event.NodeMouseExitHandler;
 import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Layer;
-import com.ait.lienzo.client.core.shape.Rectangle;
-import com.ait.lienzo.shared.core.types.Color;
-import com.ait.lienzo.shared.core.types.ColorName;
-import michael.com.Curve;
+import com.ait.lienzo.client.core.types.Point2D;
 import michael.com.Spider;
 
 /**
- * Created by Michael on 6/08/2015.
+ * A concrete spider is a filled circle.
  */
 public class ConcreteSpider extends ConcreteSyntaxElement {
 
 
-    private static final double radius = 7;
-
-    ConcreteSpider () {
-        super();
-        setFillColour(new Color(0,0,0));
-    }
-
+    // This is the centre point of the spider ... breaks the abstraction a bit cause everything else is top left
     ConcreteSpider(double x, double y) {
-        super(x,y);
-        setFillColour(new Color(0,0,0));
+        super(x,y, ConcreteSyntaxElement_TYPES.CONCRETESPIDER);
+        setFillColour(spiderColour);
+        setBorderColour(spiderColour);
     }
 
+    public Point2D getCentrePoint() {
+        //return new Point2D(getX() - spiderRadius, getY() - spiderRadius);
+        return new Point2D(getX(), getY());
+    }
 
-    //public void setRadius(double radius) { this.radius = radius; }
-
+    @Override
+    public void setBoundaryRectangle(ConcreteBoundaryRectangle rect) {
+        myBoundaryRectangle = rect;
+        rect.addSpider(this);
+    }
 
 
     @Override
@@ -49,37 +48,46 @@ public class ConcreteSpider extends ConcreteSyntaxElement {
     @Override
     public void makeConcreteRepresentation() {
         if(hasChangedOnScreen()) {
-            final Circle result = new Circle(radius);
-            result.setX(getX()).setY(getY());
-            //result.setFillColor(ColorName.BLACK);
-            result.setFillColor(getFillColour());
-            result.setStrokeColor(getBorderColour());
-            result.setDraggable(false);
+            final Circle theSpider = new Circle(spiderRadius);
+            theSpider.setX(getCentrePoint().getX()).setY(getCentrePoint().getY());
+            theSpider.setFillColor(getFillColour());
+            theSpider.setStrokeColor(getBorderColour());
+            theSpider.setDraggable(false);
 
-
-            result.addNodeMouseEnterHandler(new NodeMouseEnterHandler() {
+            theSpider.addNodeMouseEnterHandler(new NodeMouseEnterHandler() {
                 @Override
                 public void onNodeMouseEnter(NodeMouseEnterEvent event) {
-                    result.setStrokeColor(ColorName.RED);
-                    result.setFillColor(ColorName.RED);
-                    result.getLayer().batch();
+                    theSpider.setStrokeColor(spiderSelectedColor);
+                    theSpider.setFillColor(spiderSelectedColor);
+                    setIsUnderMouse();
+                    theSpider.getLayer().batch();
                 }
             });
-            result.addNodeMouseExitHandler(new NodeMouseExitHandler() {
+            theSpider.addNodeMouseExitHandler(new NodeMouseExitHandler() {
                 @Override
                 public void onNodeMouseExit(NodeMouseExitEvent event) {
-                    result.setStrokeColor(getBorderColour());
-                    result.setFillColor(getFillColour());
-                    result.getLayer().batch();
+                    theSpider.setStrokeColor(getBorderColour());
+                    theSpider.setFillColor(getFillColour());
+                    theSpider.getLayer().batch();
                 }
             });
 
-            setConcreteRepresentation(result);
+            setConcreteRepresentation(theSpider);
         }
     }
 
     @Override
     public void drawOnLayer(Layer layer) {
         layer.add(getConcreteRepresentation());
+    }
+
+    public void setAsSelected() {}
+
+    public void deleteMe() {
+        getConcreteRepresentation().setListening(false);  // seems this is required otherwise it crashes trying to
+        // respond to events while deleting
+
+        getBoundaryRectangle().getCurveLayer().remove(getConcreteRepresentation());
+        getBoundaryRectangle().removeSpider(this);
     }
 }
