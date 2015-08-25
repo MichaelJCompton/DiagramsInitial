@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.ahome-it:lienzo-core:2.0.118-RC0">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ahome-it/lienzo-core/2.0.118-RC0/lienzo-core-2.0.118-RC0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ahome-it/lienzo-core/2.0.118-RC0/lienzo-core-2.0.118-RC0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/ahome-it/lienzo-core/2.0.118-RC0/lienzo-core-2.0.118-RC0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
